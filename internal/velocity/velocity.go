@@ -3,9 +3,9 @@ package velocity
 import "math"
 
 type Velocity struct {
-	x float64
-	y float64
-	z float64
+	X float64
+	Y float64
+	Z float64
 }
 
 func New(x float64, y float64, z float64) *Velocity {
@@ -13,9 +13,9 @@ func New(x float64, y float64, z float64) *Velocity {
 }
 
 func (v *Velocity) Length() float64 {
-	return math.Sqrt(v.x*v.x + v.y*v.y + v.z*v.z)
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
 }
 
 func (v *Velocity) Length2() float64 {
-	return v.x*v.x + v.y*v.y + v.z*v.z
+	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
 }

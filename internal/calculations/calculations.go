@@ -30,23 +30,12 @@ func EccentricAnomaly(c *coordinates.Coordinates, v *velocity.Velocity, reverseS
 	cosE := part1 / e
 	sinE := part2 / e
 
-	if cosE >= 0.0 && sinE >= 0.0 {
-		return math.Acos(cosE)
+	eccentricAnomaly := math.Atan2(sinE, cosE)
+	if eccentricAnomaly < 0.0 {
+		eccentricAnomaly += 2.0 * math.Pi
 	}
 
-	if cosE <= 0.0 && sinE >= 0.0 {
-		return math.Acos(cosE)
-	}
-
-	if cosE <= 0.0 && sinE <= 0.0 {
-		return math.Pi - math.Asin(sinE)
-	}
-
-	if cosE >= 0.0 && sinE <= 0.0 {
-		return 2.0*math.Pi + math.Asin(sinE)
-	}
-
-	return 0.0
+	return eccentricAnomaly
 }
 
 func AverageAnomaly(eccentricAnomaly float64, eccentricity float64) float64 {

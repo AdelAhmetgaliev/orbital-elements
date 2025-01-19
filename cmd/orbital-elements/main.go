@@ -59,16 +59,22 @@ func main() {
 	cosArgOfPeriapsis := tempValue2 / sinInclination
 
 	argOfPeriapsis := math.Atan2(sinArgOfPeriapsis, cosArgOfPeriapsis)
+	if argOfPeriapsis < 0.0 {
+		argOfPeriapsis += 2.0 * math.Pi
+	}
 
 	sinAscendingNode :=
 		(firstVectorElement.Y*cosArgOfPeriapsis - secondVectorElement.Y*sinArgOfPeriapsis) / cose
 	cosAscendingNode := firstVectorElement.X*cosArgOfPeriapsis - secondVectorElement.X*sinArgOfPeriapsis
 
 	ascendingNode := math.Atan2(sinAscendingNode, cosAscendingNode)
+	if ascendingNode < 0.0 {
+		ascendingNode += 2.0 * math.Pi
+	}
 
 	cosInclination := -(firstVectorElement.X*sinArgOfPeriapsis + secondVectorElement.X*cosArgOfPeriapsis) / sine
 
-	inclination := math.Acos(cosInclination)
+	inclination := math.Atan2(sinInclination, cosInclination)
 
 	argOfPeriapsisDegrees := radiansToDegrees(argOfPeriapsis)
 	ascendingNodeDegrees := radiansToDegrees(ascendingNode)

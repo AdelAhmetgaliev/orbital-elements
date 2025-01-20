@@ -6,12 +6,10 @@ import (
 	"path/filepath"
 
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/calculations"
+	"github.com/AdelAhmetgaliev/orbital-elements/internal/constants"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/inputdata"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/vectorelement"
 )
-
-const EPS = 1e-15
-const eclipticTiltDegrees = 23.43929111
 
 func radiansToDegrees(r float64) float64 {
 	return r * (180.0 / math.Pi)
@@ -35,20 +33,20 @@ func main() {
 	secondVectorElement := vectorelement.Second(
 		inputCoords, inputVelocity, reverseSemiMajorAxis, eccentricAnomaly, eccentricity)
 
-	if math.Abs(firstVectorElement.Length()-1.0) > EPS {
+	if math.Abs(firstVectorElement.Length()-1.0) > constants.Epsilon {
 		panic("Length of the first vector element is greater than 1.0")
 	}
 
-	if math.Abs(secondVectorElement.Length()-1.0) > EPS {
+	if math.Abs(secondVectorElement.Length()-1.0) > constants.Epsilon {
 		panic("Length of the second vector element is greater than 1.0")
 	}
 
-	if math.Abs(vectorelement.Dot(firstVectorElement, secondVectorElement)) > EPS {
+	if math.Abs(vectorelement.Dot(firstVectorElement, secondVectorElement)) > constants.Epsilon {
 		panic("Vector elements are not orthogonal to each other")
 	}
 
-	cose := math.Cos(math.Pi * eclipticTiltDegrees / 180.0)
-	sine := math.Sin(math.Pi * eclipticTiltDegrees / 180.0)
+	cose := math.Cos(math.Pi * constants.EclipticTiltDegrees / 180.0)
+	sine := math.Sin(math.Pi * constants.EclipticTiltDegrees / 180.0)
 
 	tempValue1 := firstVectorElement.Z*cose - firstVectorElement.Y*sine
 	tempValue2 := secondVectorElement.Z*cose - secondVectorElement.Y*sine
@@ -75,6 +73,9 @@ func main() {
 	cosInclination := -(firstVectorElement.X*sinArgOfPeriapsis + secondVectorElement.X*cosArgOfPeriapsis) / sine
 
 	inclination := math.Atan2(sinInclination, cosInclination)
+	if inclination < 0.0 {
+		inclination += 2.0 * math.Pi
+	}
 
 	argOfPeriapsisDegrees := radiansToDegrees(argOfPeriapsis)
 	ascendingNodeDegrees := radiansToDegrees(ascendingNode)

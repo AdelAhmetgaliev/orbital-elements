@@ -3,6 +3,7 @@ package vectorelement
 import (
 	"math"
 
+	"github.com/AdelAhmetgaliev/orbital-elements/internal/constants"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/coordinates"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/velocity"
 )
@@ -13,12 +14,10 @@ type VectorElement struct {
 	Z float64
 }
 
-const gravitationalConstant = 0.01720209895
-
 func First(c *coordinates.Coordinates, v *velocity.Velocity,
 	reverseSemiMajorAxis float64, eccentricAnomaly float64) *VectorElement {
 	r := c.Length()
-	ak := math.Sqrt(1.0/reverseSemiMajorAxis) / gravitationalConstant
+	ak := math.Sqrt(1.0/reverseSemiMajorAxis) / constants.GravitationalConstant
 	cosE := math.Cos(eccentricAnomaly)
 	sinE := math.Sin(eccentricAnomaly)
 
@@ -35,7 +34,7 @@ func Second(c *coordinates.Coordinates, v *velocity.Velocity,
 	sinE := math.Sin(eccentricAnomaly)
 
 	tempValue1 := c.Length() * math.Sqrt(1-e*e)
-	tempValue2 := gravitationalConstant * math.Sqrt(1-e*e)
+	tempValue2 := constants.GravitationalConstant * math.Sqrt(1-e*e)
 	tempValue3 := sinE / tempValue1
 	tempValue4 := ((1.0 / math.Sqrt(reverseSemiMajorAxis)) * (cosE - e)) / tempValue2
 

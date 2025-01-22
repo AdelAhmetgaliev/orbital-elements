@@ -5,15 +5,12 @@ import (
 	"math"
 	"path/filepath"
 
+	"github.com/AdelAhmetgaliev/orbital-elements/internal/angle"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/calculations"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/constants"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/inputdata"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/vectorelement"
 )
-
-func radiansToDegrees(r float64) float64 {
-	return r * (180.0 / math.Pi)
-}
 
 func main() {
 	inputFilePath := filepath.FromSlash("data/input.txt")
@@ -45,8 +42,9 @@ func main() {
 		panic("Vector elements are not orthogonal to each other")
 	}
 
-	cose := math.Cos(math.Pi * constants.EclipticTiltDegrees / 180.0)
-	sine := math.Sin(math.Pi * constants.EclipticTiltDegrees / 180.0)
+	eclipticTilt := angle.FromDegrees(constants.EclipticTiltDegrees)
+	cose := eclipticTilt.Cos()
+	sine := eclipticTilt.Sin()
 
 	tempValue1 := firstVectorElement.Z*cose - firstVectorElement.Y*sine
 	tempValue2 := secondVectorElement.Z*cose - secondVectorElement.Y*sine
@@ -56,30 +54,21 @@ func main() {
 	sinArgOfPeriapsis := tempValue1 / sinInclination
 	cosArgOfPeriapsis := tempValue2 / sinInclination
 
-	argOfPeriapsis := math.Atan2(sinArgOfPeriapsis, cosArgOfPeriapsis)
-	if argOfPeriapsis < 0.0 {
-		argOfPeriapsis += 2.0 * math.Pi
-	}
+	argOfPeriapsis := angle.Atan2(sinArgOfPeriapsis, cosArgOfPeriapsis)
 
 	sinAscendingNode :=
 		(firstVectorElement.Y*cosArgOfPeriapsis - secondVectorElement.Y*sinArgOfPeriapsis) / cose
 	cosAscendingNode := firstVectorElement.X*cosArgOfPeriapsis - secondVectorElement.X*sinArgOfPeriapsis
 
-	ascendingNode := math.Atan2(sinAscendingNode, cosAscendingNode)
-	if ascendingNode < 0.0 {
-		ascendingNode += 2.0 * math.Pi
-	}
+	ascendingNode := angle.Atan2(sinAscendingNode, cosAscendingNode)
 
-	cosInclination := -(firstVectorElement.X*sinArgOfPeriapsis + secondVectorElement.X*cosArgOfPeriapsis) / sine
+	cosInclination := -(firstVectorElement.X*sinArgOfPeriapsis + secondVectorElement.X*cosArgOfPeriapsis) / sinAscendingNode
 
-	inclination := math.Atan2(sinInclination, cosInclination)
-	if inclination < 0.0 {
-		inclination += 2.0 * math.Pi
-	}
+	inclination := angle.Atan2(sinInclination, cosInclination)
 
-	argOfPeriapsisDegrees := radiansToDegrees(argOfPeriapsis)
-	ascendingNodeDegrees := radiansToDegrees(ascendingNode)
-	inclinationDegrees := radiansToDegrees(inclination)
+	argOfPeriapsisDegrees := argOfPeriapsis.Degrees()
+	ascendingNodeDegrees := ascendingNode.Degrees()
+	inclinationDegrees := inclination.Degrees()
 	averageAnomalyDegrees := averageAnomaly.Degrees()
 	semiMajorAxis := 1.0 / reverseSemiMajorAxis
 

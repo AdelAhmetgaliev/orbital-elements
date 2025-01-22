@@ -80,7 +80,7 @@ func main() {
 	argOfPeriapsisDegrees := radiansToDegrees(argOfPeriapsis)
 	ascendingNodeDegrees := radiansToDegrees(ascendingNode)
 	inclinationDegrees := radiansToDegrees(inclination)
-	averageAnomalyDegrees := radiansToDegrees(averageAnomaly)
+	averageAnomalyDegrees := averageAnomaly.Degrees()
 	semiMajorAxis := 1.0 / reverseSemiMajorAxis
 
 	fmt.Printf("ω = %.8f°\n", argOfPeriapsisDegrees)

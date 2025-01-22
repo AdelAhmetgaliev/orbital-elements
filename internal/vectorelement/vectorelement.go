@@ -3,6 +3,7 @@ package vectorelement
 import (
 	"math"
 
+	"github.com/AdelAhmetgaliev/orbital-elements/internal/angle"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/constants"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/coordinates"
 	"github.com/AdelAhmetgaliev/orbital-elements/internal/velocity"
@@ -15,11 +16,11 @@ type VectorElement struct {
 }
 
 func First(c *coordinates.Coordinates, v *velocity.Velocity,
-	reverseSemiMajorAxis float64, eccentricAnomaly float64) *VectorElement {
+	reverseSemiMajorAxis float64, eccentricAnomaly angle.Angle) *VectorElement {
 	r := c.Length()
 	ak := math.Sqrt(1.0/reverseSemiMajorAxis) / constants.GravitationalConstant
-	cosE := math.Cos(eccentricAnomaly)
-	sinE := math.Sin(eccentricAnomaly)
+	cosE := eccentricAnomaly.Cos()
+	sinE := eccentricAnomaly.Sin()
 
 	x := (c.X/r)*cosE - (v.X*ak)*sinE
 	y := (c.Y/r)*cosE - (v.Y*ak)*sinE
@@ -29,9 +30,9 @@ func First(c *coordinates.Coordinates, v *velocity.Velocity,
 }
 
 func Second(c *coordinates.Coordinates, v *velocity.Velocity,
-	reverseSemiMajorAxis float64, eccentricAnomaly float64, e float64) *VectorElement {
-	cosE := math.Cos(eccentricAnomaly)
-	sinE := math.Sin(eccentricAnomaly)
+	reverseSemiMajorAxis float64, eccentricAnomaly angle.Angle, e float64) *VectorElement {
+	cosE := eccentricAnomaly.Cos()
+	sinE := eccentricAnomaly.Sin()
 
 	tempValue1 := c.Length() * math.Sqrt(1-e*e)
 	tempValue2 := constants.GravitationalConstant * math.Sqrt(1-e*e)

@@ -26,19 +26,16 @@ func Atan(t float64) Angle {
 	return Angle(math.Atan(t))
 }
 
-func Atan2(c float64, s float64) Angle {
+func Atan2(s float64, c float64) Angle {
 	if c >= 0.0 && s >= 0.0 {
-		if c > s {
-			return Acos(s)
-		}
-		return Asin(c)
+		return Asin(s)
 	}
 
 	if c <= 0.0 && s >= 0.0 {
 		return Acos(c)
 	}
 
-	if c <= 0.0 && s >= 0.0 {
+	if c <= 0.0 && s <= 0.0 {
 		return Angle(math.Pi) - Asin(s)
 	}
 

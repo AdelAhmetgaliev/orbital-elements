@@ -23,7 +23,7 @@ func Asin(s float64) Angle {
 }
 
 func Atan(t float64) Angle {
-    return Angle(math.Atan(t))
+	return Angle(math.Atan(t))
 }
 
 func (a Angle) Degrees() float64 {
@@ -35,13 +35,13 @@ func (a Angle) Radians() float64 {
 }
 
 func (a Angle) Cos() float64 {
-    return math.Cos(float64(a))
+	return math.Cos(float64(a))
 }
 
 func (a Angle) Sin() float64 {
-    return math.Sin(float64(a))
+	return math.Sin(float64(a))
 }
 
 func (a Angle) Tan() float64 {
-    return math.Tan(float64(a))
+	return math.Tan(float64(a))
 }

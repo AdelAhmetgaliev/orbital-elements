@@ -29,12 +29,9 @@ func EccentricAnomaly(c *coordinates.Coordinates, v *velocity.Velocity, r float6
 	cosE := part1 / e
 	sinE := part2 / e
 
-	eccentricAnomaly := math.Atan2(sinE, cosE)
-	if eccentricAnomaly < 0.0 {
-		eccentricAnomaly += 2.0 * math.Pi
-	}
+	eccentricAnomaly := angle.Atan2(sinE, cosE)
 
-	return angle.Angle(eccentricAnomaly)
+	return eccentricAnomaly
 }
 
 func AverageAnomaly(eccentricAnomaly angle.Angle, eccentricity float64) angle.Angle {
